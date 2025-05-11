@@ -1,0 +1,133 @@
+# Gradle
+.gradle/
+build/
+.gradle/caches/
+.gradle/gradle-app.setting
+.gradle/cache/
+.gradle/tmp/
+gradle-app.setting
+!gradle/wrapper/gradle-wrapper.jar
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+# Spring Boot
+spring.log
+
+# Logs
+logs/
+*.log
+*.log.*
+npm-debug.log*
+
+# Temporary files
+*.tmp
+*.swp
+*.swo
+
+# IntelliJ IDEA
+.idea/
+*.iws
+*.iml
+*.ipr
+out/
+!**/src/main/**/out/
+!**/src/test/**/out/
+
+# NetBeans
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+# Eclipse
+.project
+.classpath
+.settings/
+.factorypath
+
+# VS Code
+.vscode/
+
+# Node.js (Vaadin Frontend)
+node_modules/
+frontend/generated/
+frontend/build/
+pnpm-lock.yaml
+package-lock.json
+yarn.lock
+webpack.generated.js
+flow-frontend/
+flow-build-info.json
+
+# Docker
+docker-compose.override.yml
+docker-compose.yml
+.docker/
+.env
+*.env
+docker-data/
+docker-entrypoint-initdb.d/
+docker-compose-dev.yml
+
+# PostgreSQL
+*.sql
+*.dump
+*.db
+pgdata/
+pg_log/
+*.backup
+postgresql.conf
+pg_hba.conf
+
+# PostgreSQL data directory
+postgres-data/
+pgdata/
+pg_log/
+*.dump
+*.sql
+*.backup
+postgresql.conf
+pg_hba.conf
+postgresql.auto.conf
+postmaster.pid
+postmaster.opts
+PG_VERSION
+# OS-specific files
+.DS_Store
+.AppleDouble
+.LSOverride
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Build artifacts
+*.war
+*.jar
+*.ear
+
+# Lombok
+lombok.config
+
+# Test output
+/test-output/
+surefire-reports/
+test-output/
+*.ec
+*.exec
+*.coverage
+
+# Idea module files
+.idea_modules/
+.idea/
+*.iml
+
+# Temp files
+temp/
+.tmp/
+*.temp
+
+# Gradle wrapper logs and properties
+gradle-wrapper.log
+gradle.properties

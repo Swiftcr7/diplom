@@ -1,0 +1,82 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.4.4'
+    id 'io.spring.dependency-management' version '1.1.7'
+    id 'com.vaadin' version '24.3.10'
+}
+
+group = 'com.example'
+version = '0.0.1-SNAPSHOT'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+    maven { url "https://maven.vaadin.com/vaadin-addons" }
+}
+
+ext {
+    set('vaadinVersion', "24.3.10")
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    compileOnly 'org.projectlombok:lombok'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    annotationProcessor 'org.projectlombok:lombok'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+    implementation "org.springframework.boot:spring-boot-starter-security"
+
+    implementation group: 'org.postgresql', name: 'postgresql', version: '42.7.3'
+
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-redis', version: '3.2.5'
+
+    implementation 'org.apache.kafka:kafka-clients:3.4.0'
+
+    implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.0'
+    implementation 'commons-io:commons-io:2.16.1'
+
+    // configuration
+    implementation 'com.typesafe:config:1.4.2'
+
+    implementation "com.vaadin:vaadin-core:${vaadinVersion}"
+    implementation "com.vaadin:vaadin-spring:${vaadinVersion}"
+     // Убедитесь, что версия соответствует вашей
+    //implementation "com.vaadin:vaadin-charts-flow:${vaadinVersion}"
+
+    implementation 'org.apache.poi:poi-ooxml:5.2.3'
+
+    implementation 'org.json:json:20230227'
+
+
+    // json
+    implementation 'com.fasterxml.jackson.core:jackson-core:2.16.1'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.16.1'
+
+   // implementation "com.vaadin:vaadin-charts:${vaadinVersion}"
+
+}
+
+
+dependencyManagement {
+    imports {
+        mavenBom "com.vaadin:vaadin-bom:${vaadinVersion}"
+    }
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
