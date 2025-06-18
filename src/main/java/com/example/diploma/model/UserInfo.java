@@ -1,7 +1,5 @@
 package com.example.diploma.model;
 
-import com.example.diploma.model.Car;
-import com.example.diploma.model.Staff;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;

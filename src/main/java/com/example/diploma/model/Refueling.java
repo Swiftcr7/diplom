@@ -1,6 +1,5 @@
 package com.example.diploma.model;
 
-import com.example.diploma.model.Car;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

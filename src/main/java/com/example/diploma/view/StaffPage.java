@@ -1,6 +1,6 @@
 package com.example.diploma.view;
 
-import com.example.diploma.service.StaffService;
+import com.example.diploma.service.StaffServiece;
 import com.example.diploma.model.*;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.UI;
@@ -41,11 +41,11 @@ import java.util.stream.Collectors;
 @PreAuthorize("hasRole('USER')")
 public class StaffPage extends VerticalLayout {
 
-    private final StaffService staffService;
+    private final StaffServiece staffService;
 
     private final Grid<Staff> grid = new Grid<>(Staff.class, false);
 
-    public StaffPage(StaffService staffService) {
+    public StaffPage(StaffServiece staffService) {
         this.staffService = staffService;
 
         configureGrid();

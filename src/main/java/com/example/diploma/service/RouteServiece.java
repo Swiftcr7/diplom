@@ -1,10 +1,9 @@
 package com.example.diploma.service;
 
 import com.example.diploma.model.LatLng;
-import com.example.diploma.model.Routes;
+import com.example.diploma.model.Route;
 import com.example.diploma.model.UserInfo;
 import com.example.diploma.repository.RouteRepository;
-import com.example.diploma.service.RouteCalculator;
 import com.vaadin.flow.server.VaadinSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,13 +16,13 @@ import java.util.List;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class RouteService {
+public class RouteServiece {
 
     private final RouteRepository routeRepository;
 
 
 
-    public void save(Routes route, boolean manualInput) throws IOException, InterruptedException {
+    public void save(Route route, boolean manualInput) throws IOException, InterruptedException {
         log.info("Режим ввода (вручную координаты): " + manualInput);
         log.info("Имя заказчика: " + route.getCustomerName());
         log.info("Адрес откуда: " + route.getFromAddress());
@@ -124,7 +123,7 @@ public class RouteService {
     }
 
 
-    public List<Routes> findByCurrentUser() {
+    public List<Route> findByCurrentUser() {
         UserInfo user = (UserInfo) VaadinSession.getCurrent().getAttribute("userInfo");
         return routeRepository.findAllByOwner(user);
     }

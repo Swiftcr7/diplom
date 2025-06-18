@@ -10,10 +10,7 @@ import java.util.List;
 
 public interface StaffRepository extends JpaRepository<Staff, Long> {
     List<Staff> findByOwner(UserInfo owner);
-
-
     @Query("SELECT s FROM Staff s LEFT JOIN FETCH s.assignedVehicle")
     List<Staff> findAllWithAssignedVehicle();
-
     List<Staff> findByAssignedVehicle(Car car);
 }

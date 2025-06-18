@@ -16,7 +16,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Routes {
+public class Route {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

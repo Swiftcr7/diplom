@@ -2,34 +2,29 @@ package com.example.diploma.view;
 
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Span;
-import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
-import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.VaadinSession;
-import com.vaadin.flow.server.auth.AnonymousAllowed;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.csrf.CsrfToken;
 import lombok.extern.slf4j.Slf4j;
 
 @Route("login")
 @Slf4j
-public class LoginView extends VerticalLayout {
+public class LoginPage extends VerticalLayout {
 
     private final AuthenticationManager authenticationManager;
 
 
-    public LoginView(AuthenticationManager authenticationManager) {
+    public LoginPage(AuthenticationManager authenticationManager) {
         this.authenticationManager = authenticationManager;
 
 
@@ -95,14 +90,14 @@ public class LoginView extends VerticalLayout {
 
         registerButton.addClickListener(e -> UI.getCurrent().navigate("authorization"));
 
-        loginButton.getStyle().set("background-color", "#007BFF"); // синий
+        loginButton.getStyle().set("background-color", "#007BFF");
         loginButton.getStyle().set("color", "white");
 
-        registerButton.getStyle().set("background-color", "#007BFF"); // синий
+        registerButton.getStyle().set("background-color", "#007BFF");
         registerButton.getStyle().set("color", "white");
 
         HorizontalLayout formLayout = new HorizontalLayout(loginButton, registerButton);
-        formLayout.setJustifyContentMode(JustifyContentMode.CENTER); // Центрируем
+        formLayout.setJustifyContentMode(JustifyContentMode.CENTER);
         formLayout.setAlignItems(Alignment.CENTER);
         formLayout.setSpacing(true);
         loginButton.setWidth("150px");

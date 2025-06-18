@@ -2,8 +2,8 @@ package com.example.diploma.view;
 
 
 import com.example.diploma.model.LatLng;
-import com.example.diploma.service.RouteService;
-import com.example.diploma.model.Routes;
+import com.example.diploma.service.RouteServiece;
+import com.example.diploma.model.Route;
 import com.example.diploma.model.UserInfo;
 import com.example.diploma.repository.UserRepository;
 import com.vaadin.flow.component.button.Button;
@@ -26,7 +26,6 @@ import com.vaadin.flow.component.textfield.NumberField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.component.timepicker.TimePicker;
 
-import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.VaadinSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,17 +38,17 @@ import java.util.Objects;
 @Slf4j
 @PreAuthorize("hasRole('USER')")
 @JavaScript("https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js")
-@Route("routing")
+@com.vaadin.flow.router.Route("routing")
 public class RoutingPage extends VerticalLayout {
     @Autowired
-    private final RouteService routeService;
+    private final RouteServiece routeService;
 
     @Autowired
     private final UserRepository userRepository;
 
-    private final Grid<Routes> grid = new Grid<>(Routes.class, false);
+    private final Grid<Route> grid = new Grid<>(Route.class, false);
 
-    public RoutingPage(RouteService routeService, UserRepository userRepository) {
+    public RoutingPage(RouteServiece routeService, UserRepository userRepository) {
         this.routeService = routeService;
         this.userRepository = userRepository;
 
@@ -69,12 +68,12 @@ public class RoutingPage extends VerticalLayout {
 
 
     private void configureGrid() {
-        grid.addColumn(Routes::getFromAddress).setHeader("Откуда");
-        grid.addColumn(Routes::getToAddress).setHeader("Куда");
+        grid.addColumn(Route::getFromAddress).setHeader("Откуда");
+        grid.addColumn(Route::getToAddress).setHeader("Куда");
         grid.addColumn(r -> r.getTransportDates().size()).setHeader("Дней");
-        grid.addColumn(Routes::getDepartureTime).setHeader("Отправление");
-        grid.addColumn(Routes::getSeatsRequired).setHeader("Мест");
-        grid.addColumn(Routes::getTripsRequired).setHeader("Рейсов");
+        grid.addColumn(Route::getDepartureTime).setHeader("Отправление");
+        grid.addColumn(Route::getSeatsRequired).setHeader("Мест");
+        grid.addColumn(Route::getTripsRequired).setHeader("Рейсов");
         grid.addComponentColumn(route -> {
             Button detailsButton = new Button("Подробнее");
             detailsButton.addClickListener(event -> openDetailsDialog(route));
@@ -84,11 +83,11 @@ public class RoutingPage extends VerticalLayout {
     }
 
     private void refreshRoutes() {
-        List<Routes> routes = routeService.findByCurrentUser();
+        List<Route> routes = routeService.findByCurrentUser();
         grid.setItems(routes);
     }
 
-    private void openDetailsDialog(Routes route) {
+    private void openDetailsDialog(Route route) {
         Dialog dialog = new Dialog();
         dialog.setHeaderTitle("Детальная информация");
 
@@ -108,15 +107,15 @@ public class RoutingPage extends VerticalLayout {
             layout.add(new Span("Дата: " + date.toString()));
         });
 
-        layout.add(new H3("Неоптимизированный маршрут"));
+        layout.add(new H3("Исходный маршрут, заданный пользователем"));
         layout.add(new Span("Общая дистанция: " + route.getTotalDistanceMeters() / 1000 + " км"));
         layout.add(new Span("Общее время в пути: " + (route.getTotalDurationSeconds() / 60) + " мин"));
         layout.add(new H4("Порядок следования:"));
-        layout.add(new Span(route.getFromAddress()));
+        layout.add(new Span(" → " + route.getFromAddress()));
         route.getStopAddresses().forEach(addr -> layout.add(new Span(" → " + addr)));
         layout.add(new Span(" → " + route.getToAddress()));
 
-        layout.add(new H3("Оптимизированный маршрут"));
+        layout.add(new H3("Альтернативный маршрут"));
         layout.add(new Span("Общая дистанция: " + route.getOptimalDistanceMeters() / 1000 + " км"));
         layout.add(new Span("Общее время в пути: " + (route.getOptimalDurationSeconds() / 60) + " мин"));
         layout.add(new H4("Порядок следования:"));
@@ -214,7 +213,7 @@ public class RoutingPage extends VerticalLayout {
 
         Button saveBtn = new Button("Сохранить", e -> {
             try {
-                Routes route = new Routes();
+                Route route = new Route();
                 UserInfo userInfo = (UserInfo) VaadinSession.getCurrent().getAttribute("userInfo");
                 Long id = userInfo.getId();
                 UserInfo user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("Пользователь не найден"));

@@ -39,3 +39,4 @@ public class Staff {
     @JoinColumn(name = "user_id")
     private UserInfo owner;
 }
+

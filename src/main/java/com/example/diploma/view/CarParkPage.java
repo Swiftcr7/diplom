@@ -5,7 +5,7 @@ import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
-import com.example.diploma.service.Server;
+import com.example.diploma.service.CarParkServiece;
 import com.example.diploma.model.*;
 import com.example.diploma.repository.UserRepository;
 import com.vaadin.flow.component.AttachEvent;
@@ -47,10 +47,8 @@ import java.util.stream.Collectors;
 @PreAuthorize("hasRole('USER')")
 @JavaScript("https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js")
 @Route("car_park")
-public class CarPark extends VerticalLayout {
-    private final Server server;
-
-    private final UserRepository userRepository;
+public class CarParkPage extends VerticalLayout {
+    private final CarParkServiece server;
 
     private final Grid<Car> grid;
 
@@ -63,10 +61,10 @@ public class CarPark extends VerticalLayout {
 
 
     @Autowired
-    public CarPark(Server server, UserRepository userRepository){
+    public CarParkPage(CarParkServiece server, UserRepository userRepository){
 
         this.server = server;
-        this.userRepository = userRepository;
+
 
         H1 header = new H1("Автопарк");
 
@@ -95,7 +93,11 @@ public class CarPark extends VerticalLayout {
         Button filterButton = new Button("Показать");
 
         HorizontalLayout filterLayout = new HorizontalLayout(fromDate, toDate, filterButton);
-        filterLayout.setAlignItems(FlexComponent.Alignment.END);
+        try {
+            filterLayout.setAlignItems(Alignment.END);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
         Div filterPanel = new Div(filterLayout);
         filterPanel.getStyle()
                 .set("background-color", "#ffffff")
@@ -927,7 +929,7 @@ public class CarPark extends VerticalLayout {
         });
     }
 
-    // Загружаем Chart.js и плагин datalabels
+    
     if (!window.Chart || !window.ChartDataLabels) {
         const script1 = document.createElement("script");
         script1.src = "https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js";
@@ -1273,7 +1275,7 @@ public class CarPark extends VerticalLayout {
             StringBuilder data = new StringBuilder();
 
 
-            List<Server.RefuelingMonthlyReport> sortedReports = monthlyReports.stream()
+            List<CarParkServiece.RefuelingMonthlyReport> sortedReports = monthlyReports.stream()
                     .sorted((r1, r2) -> {
 
                         String[] month1 = r1.getMonth().split(" ");
@@ -1292,7 +1294,7 @@ public class CarPark extends VerticalLayout {
                     .toList();
 
 
-            for (Server.RefuelingMonthlyReport report : sortedReports) {
+            for (CarParkServiece.RefuelingMonthlyReport report : sortedReports) {
                 if (labels.length() > 0) {
                     labels.append(", ");
                     data.append(", ");
@@ -1381,7 +1383,8 @@ public class CarPark extends VerticalLayout {
         chartDiv1.setId("chartDiv1");
         chartDiv1.setWidth("100%");
         chartDiv1.setHeight("400px");
-        chartDiv1.getStyle().set("margin-bottom", "100px");
+        chartDiv1.getStyle().set("margin-top", "20px");
+        chartDiv1.getStyle().set("margin-bottom", "80px");
         layout.add(chartDiv1);
 
 
@@ -1442,31 +1445,59 @@ public class CarPark extends VerticalLayout {
         getUI().ifPresent(ui -> ui.getPage().executeJs(chartJsCode));
 
         DatePicker fromDate = new DatePicker("С");
-        DatePicker toDate = new DatePicker("По");
-        fromDate.setValue(LocalDate.now().minusMonths(1));
-        toDate.setValue(LocalDate.now());
+        DatePicker toDate   = new DatePicker("По");
+        Button     filterButton = new Button("Применить фильтр");
 
-        Button filterButton = new Button("Применить фильтр");
-        HorizontalLayout filterLayout = new HorizontalLayout(fromDate, toDate, filterButton);
+
+        fromDate.setWidth("150px");
+        toDate.setWidth(  "150px");
+
+
+        HorizontalLayout filterLayout = new HorizontalLayout();
+        filterLayout.setWidthFull();
+        filterLayout.setSpacing(true);
+        filterLayout.setPadding(true);
+        filterLayout.setAlignItems(FlexComponent.Alignment.END);
+        filterLayout.setJustifyContentMode(JustifyContentMode.START);
+        filterLayout.expand(toDate);
+        filterLayout.getStyle().set("margin-top", "280px");
+        filterLayout.getStyle().set("margin-bottom", "40px");
         layout.add(filterLayout);
 
-        fromDate.getStyle().set("margin-top", "45px");
-        toDate.getStyle().set("margin-top", "45px");
-        filterButton.getStyle().set("margin-top", "85px");
+        filterLayout.add(fromDate, toDate, filterButton);
+        filterLayout.expand(toDate);
+
+        layout.add(filterLayout);
+
+
 
 
         Div historyChartDiv = new Div();
+        historyChartDiv.getStyle().set("margin-top", "20px");
+        historyChartDiv.getStyle().set("margin-bottom", "40px");
         historyChartDiv.setId("historyChart");
         historyChartDiv.setWidth("100%");
         historyChartDiv.setHeight("400px");
 
         Div averageChartDiv = new Div();
+        averageChartDiv.getStyle().set("margin-top", "10px");
+        averageChartDiv.getStyle().set("margin-bottom", "40px");
         averageChartDiv.setId("averageChart");
         averageChartDiv.setWidth("100%");
         averageChartDiv.setHeight("400px");
 
-        layout.add(new H4("История поездок"), historyChartDiv);
-        layout.add(new H4("Средняя дистанция по месяцам"), averageChartDiv);
+        H4 historyTitle = new H4("История поездок");
+        historyTitle.getStyle().set("margin-top", "30px");
+        H4 averageTitle = new H4("Средняя дистанция по месяцам");
+        averageTitle.getStyle().set("margin-top", "30px");
+
+        historyChartDiv.getStyle().set("margin-bottom", "40px");
+        averageChartDiv.getStyle().set("margin-bottom", "40px");
+
+        layout.add(historyTitle, historyChartDiv);
+        layout.add(averageTitle, averageChartDiv);
+
+
 
 
         Runnable updateCharts = () -> {
@@ -1571,7 +1602,7 @@ public class CarPark extends VerticalLayout {
         formatSelector.setItems("TXT", "XLSX");
         formatSelector.setValue("TXT");
 
-        Anchor anchor = new Anchor(); // пустая ссылка пока
+        Anchor anchor = new Anchor();
 
         Button downloadButton = new Button("Скачать отчет", event -> {
             try {

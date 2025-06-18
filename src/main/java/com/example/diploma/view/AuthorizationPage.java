@@ -1,5 +1,5 @@
 package com.example.diploma.view;
-import com.example.diploma.service.Server;
+import com.example.diploma.service.CarParkServiece;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.notification.Notification;
@@ -19,12 +19,12 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 @Slf4j
 @Route("authorization")
-public class Authorization extends VerticalLayout {
-    private final Server server;
+public class AuthorizationPage extends VerticalLayout {
+    private final CarParkServiece server;
 
     private final AuthenticationManager authenticationManager;
     @Autowired
-    public Authorization(Server server, AuthenticationManager authenticationManager){
+    public AuthorizationPage(CarParkServiece server, AuthenticationManager authenticationManager){
         this.server = server;
 
         this.authenticationManager = authenticationManager;
